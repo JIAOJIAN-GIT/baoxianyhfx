@@ -26,64 +26,64 @@
         <el-col :span="24" :gutter="10">
           <el-col class="massge_top" :span="7">
             <span>姓名</span>
-            <span>张天爱</span>
+            <span>{{ lengthShu == 1 ? me.name : "未知" }}</span>
           </el-col>
           <el-col class="massge_top" :span="7">
             <span>性别</span>
-            <span>女</span>
+            <span>{{ lengthShu == 1 ? me.sex : "未知" }}</span>
           </el-col>
           <el-col class="massge_top" :span="7">
             <span>地区</span>
-            <span>太原</span>
+            <span>{{ lengthShu == 1 ? me.region : "未知" }}</span>
           </el-col>
           <el-col class="massge_top" :span="7">
             <span>生日</span>
-            <span>1968年5月20日</span>
+            <span>{{ lengthShu == 1 ? me.birthday : "未知" }}</span>
           </el-col>
           <el-col class="massge_top" :span="7">
             <span>渠道</span>
-            <span>个险</span>
+            <span>{{ lengthShu == 1 ? me.channel : "未知" }}</span>
           </el-col>
           <el-col class="massge_top" :span="7">
             <span>客户级别</span>
-            <span> 钻石客户</span>
+            <span> {{ lengthShu == 1 ? me.level : "未知" }}</span>
           </el-col>
           <el-col class="massge_top" :span="7">
             <span>理赔</span>
-            <span>否</span>
+            <span>{{ lengthShu == 1 ? "否" : "未知" }}</span>
           </el-col>
           <el-col class="massge_top" :span="7">
             <span>投诉</span>
-            <span>否</span>
+            <span>{{ lengthShu == 1 ? "否" : "未知" }}</span>
           </el-col>
         </el-col>
         <el-col :span="24">
           <el-row class="massge_bottom" type="flex" justify="space-around">
             <el-col :span="6">
               <div>保障总额度</div>
-              <div>5000000</div>
+              <div>{{ me.tbamntTotal ? me.tbamntTotal : "0" }}</div>
             </el-col>
             <el-col :span="6">
               <div>年金险保障额度</div>
-              <div>5000000</div>
+              <div>{{ totlelist["年金险"] ? totlelist["年金险"] : "0" }}</div>
             </el-col>
             <el-col :span="6">
               <div>健康险保障额度</div>
-              <div>600000</div>
+              <div>{{ totlelist["健康险"] ? totlelist["健康险"] : "0" }}</div>
             </el-col>
           </el-row>
           <el-row class="massge_bottom" type="flex" justify="space-around">
             <el-col :span="6">
               <div>意外险保障额度</div>
-              <div>5000000</div>
+              <div>{{ totlelist["意外险"] ? totlelist["意外险"] : "0" }}</div>
             </el-col>
             <el-col :span="6">
               <div>寿险保障额度</div>
-              <div>400000</div>
+              <div>{{ totlelist["寿险"] ? totlelist["寿险"] : "0" }}</div>
             </el-col>
             <el-col :span="6">
               <div>保障缺口</div>
-              <div>2400000</div>
+              <div>{{ me.meamntGap ? me.meamntGap : "0" }}</div>
             </el-col>
           </el-row>
         </el-col>
@@ -130,7 +130,7 @@
             ></el-table-column>
             <el-table-column
               align="center"
-              prop="address"
+              prop="region"
               label="地区"
             ></el-table-column>
             <el-table-column
@@ -146,40 +146,40 @@
             <el-table-column
               align="center"
               width="120"
-              prop="idno"
+              prop="age"
               label="年龄"
             ></el-table-column>
             <el-table-column
               align="center"
-              prop="contno"
+              prop="prdtype"
               label="险种分类名称"
             ></el-table-column>
             <el-table-column
               align="center"
               width="120"
-              prop="passiveName"
+              prop="premTotal"
               label="主险保费总额"
             ></el-table-column>
             <el-table-column
               align="center"
               width="120"
-              prop="relationship"
+              prop="amnt"
               label="主险保额总额"
             ></el-table-column>
             <el-table-column
               align="center"
-              prop="riskshortname"
+              prop="prem"
               label="年交保费总额"
             ></el-table-column>
             <el-table-column
               align="center"
               width="120"
-              prop="riskcode"
+              prop="meamntGap"
               label="保障缺口"
             ></el-table-column>
             <el-table-column
               align="center"
-              prop="prem"
+              prop="state"
               label="保单服务状态"
             ></el-table-column>
             <el-table-column
@@ -210,12 +210,20 @@ export default {
   data() {
     return {
       input: "qinfshu",
+      lengthShu: "2",
       formDate: {
-        name: "",
+        name: "30bd36467a16a85b",
+        isinsured: "1",
+        id: "",
+        prdtype: "",
         idno: "",
         appntno: "",
+        page: 0, //当前页码
+        page_size: 20, //一页条数
       },
       multipleSelection: [],
+      me: {},
+      totlelist: {},
       tableData: [
         {
           date: "2016-05-03",
@@ -300,11 +308,86 @@ export default {
       this.multipleSelection = val;
     },
     handleClick(row) {
-      this.$router.push(`/home/SAbaozhangxiangqing?id=${row.id}`);
-      console.log(row.id);
+      console.log("111111111");
+      this.$store.commit("saveIndexState", "1");
+      this.$router.push(
+        `/home/SAbaozhangxiangqing?id=${row.id}&prdtype=${row.prdtype}`
+      );
+      console.log(row);
     },
-    querydata() {},
+    open() {
+      this.$alert("有同名客户，请输入多个搜索条件", "错误", {
+        confirmButtonText: "确定",
+      });
+    },
+    open1() {
+      this.$alert("未找到数据", "错误", {
+        confirmButtonText: "确定",
+      });
+    },
+    // 查询事件
+    querydata() {
+      this.formDate.prdtype = "";
+      this.requestData(this.formDate);
+    },
     resetData() {},
+    requestData(params) {
+      let date = {};
+      for (let item in params) {
+        if (params[item] !== "") {
+          date[item] = params[item];
+        }
+      }
+      // console.log(date);
+      this.tableData = [];
+      this.$axios({
+        url: "/users",
+        params: date,
+      })
+        .then((res) => {
+          this.me = res.data.data;
+          let obj = Object.values(res.data.data.Customer);
+          this.lengthShu = obj.length;
+          console.log(obj);
+          if (this.lengthShu == 1) {
+            this.me = obj[0];
+            this.totlelist = [];
+            Object.keys(obj[0].prdtypes).forEach((item) => {
+              // obj[0].prdtypes.forEach((item) => {
+              this.formDate.prdtype = item;
+              this.totlelist[item] = obj[0].prdtypes[item].amnt;
+              let obj3 = {
+                id: obj[0].id,
+                name: obj[0].name,
+                region: obj[0].region,
+                level: obj[0].level,
+                sex: obj[0].sex,
+                age: "18",
+                prdtype: item,
+                premTotal: obj[0].prdtypes[item].premTotal,
+                amnt: obj[0].prdtypes[item].amnt,
+                prem: obj[0].prdtypes[item].prem,
+                meamntGap: 1000000 - obj[0].prdtypes[item].premTotal,
+                state: "123",
+              };
+              this.tableData.push(obj3);
+            });
+          } else if (obj.length >= 2) {
+            this.open();
+          } else {
+            this.open1();
+          }
+
+          // 整体数据
+          // this.tableData = obj;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+  },
+  mounted: function () {
+    this.requestData(this.formDate);
   },
   components: {
     echarts,
@@ -354,6 +437,8 @@ export default {
 }
 .massge_top > span:nth-of-type(2) {
   margin: 0 auto;
+  max-height: 9px;
+  overflow: hidden;
 }
 
 .massge_bottom > .el-col > div:nth-of-type(1) {

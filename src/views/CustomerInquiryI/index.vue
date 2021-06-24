@@ -23,21 +23,33 @@
             placeholder="个险"
             style="width: 100px"
           >
-            <el-option label="" value="shanghai"></el-option>
+            <el-option
+              v-for="(item, i) in FData.channels.data"
+              :key="i"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="城市">
           <el-select
-            v-model="params.region"
+            v-model="params.cities"
             placeholder="太原"
             style="width: 120px"
           >
-            <el-option label="" value="呼和浩特"></el-option>
+            <el-option
+              v-for="(item, i) in FData.cities.data"
+              :key="i"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="区">
           <el-select v-model="params.region" placeholder="小店区">
-            <el-option label="" value="shanghai"></el-option>
+            <el-option
+              v-for="(item, i) in FData.regions.data"
+              :key="i"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="客户级别">
@@ -46,7 +58,11 @@
             placeholder="钻石客户"
             style="width: 120px"
           >
-            <el-option label="区域一" value="shanghai"></el-option>
+            <el-option
+              v-for="(item, i) in FData.customer_levels.data"
+              :key="i"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="服务">
@@ -55,7 +71,11 @@
             placeholder="在职"
             style="width: 100px"
           >
-            <el-option label="区域一" value="shanghai"></el-option>
+            <el-option
+              v-for="(item, i) in FData.servstates.data"
+              :key="i"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item width="200px">
@@ -69,7 +89,7 @@
       </el-form>
     </el-card>
     <!-- 数据展示 -->
-    <el-card class="shu" body-style="padding: 10px 0px;">
+    <el-card class="shu" body-style="padding: 10px 0px">
       <div class="content_title">
         <div>客户列表</div>
         <div>
@@ -90,7 +110,7 @@
           backgroundColor: '#03a7f0',
           color: '#fff',
         }"
-        height="600"
+        height="570"
         tooltip-effect="dark"
         style="width: 100%"
         @selection-change="handleSelectionChange"
@@ -175,9 +195,21 @@
       <div class="content_title1">
         <div>
           <div>
-            <el-checkbox v-model="value" label="全选" border></el-checkbox>
-            <el-checkbox v-model="value" label="反选" border></el-checkbox>
-            <el-select style="width: 90px" v-model="value" placeholder="请选择">
+            <el-button
+              icon="el-icon-check"
+              :indeterminate="isIndeterminate"
+              v-model="checkAll"
+              @click="selAll()"
+              >全选
+            </el-button>
+            <el-button icon="el-icon-finished" @click="unselAll(tableData)"
+              >反选
+            </el-button>
+            <el-select
+              style="width: 190px"
+              v-model="value"
+              placeholder="请选择"
+            >
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -193,6 +225,7 @@
               layout="prev, pager, next,sizes"
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
+              :page-sizes="[10, 20]"
               :current-page="params.page"
               :total="params.total"
               :page-size="params.page_size"
@@ -208,7 +241,7 @@
       title="高级搜索"
       :before-close="handleClose"
       :visible.sync="dialog"
-      size="40%"
+      size="45%"
       direction="btt"
       custom-class="demo-drawer"
       ref="drawer"
@@ -217,11 +250,11 @@
         <el-form :model="form" class="form2">
           <el-form-item
             :label-width="formLabelWidth"
-            v-for="(item, i) in FData"
+            v-for="(item, i) in formdata"
             :key="i"
           >
             <div>{{ item.name }} :</div>
-            <el-select v-model="form.region" :placeholder="item.data[0]">
+            <el-select :placeholder="item.data[0]">
               <el-option
                 v-for="(text, i) in item.data"
                 :key="i"
@@ -245,20 +278,27 @@ export default {
   data() {
     return {
       input: "",
-      value: "da",
+      value: "",
+      isIndeterminate: "",
+      checkAll: "",
+      // 查询参数
       params: {
         name: "", //名字
         channel: "", //渠道
-        region: "", //城市
-        region1: "", //地区
+        cities: "", //城市
+        region: "", //地区
         level: "", //级别
         state: "", //服务
         page: 1, //当前页码
         page_size: 10, //一页条数
         total: 0, //总页数
       },
-      formdata: {},
-      options: [],
+      // 高级查询数据
+      formdata: [],
+      options: [{ label: "批量操作", value: "批量操作" }],
+      // 查询数据
+      FData: [],
+      // 表数据
       tableData: [],
       // tableData: [
       //   {
@@ -281,62 +321,14 @@ export default {
       //     },
       //   },
       // ],
+
+      // 当表格选择项发生变化时
       multipleSelection: [],
 
       // 弹框
-      table: false,
       dialog: false,
       loading: false,
-      FData: [
-        {
-          name: "客户等级",
-          data: ["钻石客户", "铂金客户"],
-        },
-        {
-          name: "性别",
-          data: ["钻石客户", "铂金客户"],
-        },
-        {
-          name: "年龄",
-          data: ["钻石客户", "铂金客户"],
-        },
-        {
-          name: "地区",
-          data: ["钻石客户", "铂金客户"],
-        },
-        {
-          name: "保险种类",
-          data: ["钻石客户", "铂金客户"],
-        },
-        {
-          name: "销售渠道",
-          data: ["钻石客户", "铂金客户"],
-        },
-        {
-          name: "年缴保费",
-          data: ["钻石客户", "铂金客户"],
-        },
-        {
-          name: "保费总额",
-          data: ["钻石客户", "铂金客户"],
-        },
-        {
-          name: "保障额度",
-          data: ["钻石客户", "铂金客户"],
-        },
-        {
-          name: "保单服务状态",
-          data: ["钻石客户", "铂金客户"],
-        },
-        {
-          name: "保单数",
-          data: ["钻石客户", "铂金客户"],
-        },
-        {
-          name: "最近一次保单生效时间",
-          data: ["钻石客户", "铂金客户", "铂金客户", "铂金客户"],
-        },
-      ],
+
       form: {
         name: "",
         region: "",
@@ -351,10 +343,57 @@ export default {
       timer: null,
     };
   },
+  watch: {
+    // 监听表格多选事件
+    tableData: {
+      handler(value) {
+        if (this.checkAll) {
+          this.tableData.forEach((row) => {
+            if (row) {
+              this.$refs.multipleTable.toggleAllSelection(row, true);
+            }
+          });
+        }
+      },
+      deep: true,
+    },
+  },
   methods: {
+    selAll() {
+      if (this.$refs.multipleTable.selection.length < this.tableData.length) {
+        this.checkAll = true;
+      } else {
+        this.checkAll = false;
+      }
+      this.$refs.multipleTable.toggleAllSelection();
+    },
+    //表格内checkbox触发的全选按钮状态变化
+    selRow(val) {
+      if (val.length < this.tableData.length && val.length > 0) {
+        this.isIndeterminate = true;
+      } else if (val.length === this.tableData.length) {
+        this.isIndeterminate = false;
+        this.checkAll = true;
+      } else if (val.length === 0) {
+        this.isIndeterminate = false;
+        this.checkAll = false;
+      }
+    },
+    unselAll(rows) {
+      if (rows) {
+        rows.forEach((row) => {
+          this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
     //详情
     handleClick(row) {
-      this.$router.push(`/home/SAbaozhangxiangqing?id=${row.id}`);
+      this.$store.commit("saveIndexState", "0");
+      this.$router.push(
+        `/home/SAbaozhangxiangqing1?id=${row.id}&name=${row.name}`
+      );
       console.log(row.id);
     },
     // 请求数据
@@ -373,8 +412,11 @@ export default {
       })
         .then((res) => {
           this.params.total = res.data.total;
-          let obj = Object.values(res.data.data.Customer);
+          // let obj = Object.values(res.data.data.Customer);
           // 整体数据
+          let obj = Object.keys(res.data.data.Customer);
+          obj = obj.sort();
+          obj = obj.map((x) => res.data.data.Customer[x]);
           this.tableData = obj;
 
           console.log(obj);
@@ -398,7 +440,7 @@ export default {
         region: "", //地区
         level: "", //级别
         state: "", //服务
-        page: 1, //当前页码
+        page: 0, //当前页码
         page_size: 10, //一页条数
         total: 0, //总页数
       };
@@ -434,10 +476,11 @@ export default {
     },
     //查询事件
     querydata2() {
-      this.params.page = "1";
-      this.params.page_size = "10";
-      this.requestData(this.params);
-      this.cancelForm();
+      // this.params.page = "1";
+      // this.params.page_size = "10";
+      // this.requestData(this.params);
+      // this.cancelForm();
+      console.log(this.form);
     },
     cancelForm() {
       this.loading = false;
@@ -445,9 +488,10 @@ export default {
     },
   },
   mounted: function () {
-    // this.$axios.get("/users").then((res) => {
-    //   console.log(res.data.data.Customer);
-    // });
+    this.$axios.get("/dictionary").then((res) => {
+      this.FData = res.data.customer;
+      this.formdata = Object.values(res.data.customer);
+    });
     this.requestData(this.params);
   },
 };
@@ -481,6 +525,7 @@ export default {
 
 /* 下部分 */
 .shu {
+  margin-top: 25px;
   position: absolute;
   left: 0px;
   right: 0px;
@@ -526,7 +571,7 @@ export default {
 }
 .demo-drawer__footer {
   text-align: right;
-  padding: 50px 40px 0px 0px;
+  padding: 20px 40px 0px 0px;
 }
 .demo-drawer__footer > .el-link {
   margin-right: 10px;

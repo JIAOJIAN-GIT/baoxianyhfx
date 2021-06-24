@@ -25,7 +25,49 @@ export default new Router({
         {
           path: '',
           // 客户画像
-          component: () => import('../views/CustomerPortrait')
+          component: () => import('../views/CustomerPortrait'),
+          children: [
+            //级别
+            {
+              path: '',
+              component: () => import('../components/CustomerPortrait_item/CP_level.vue')
+            },
+            //年龄
+            {
+              path: 'age',
+              component: () => import('../components/CustomerPortrait_item/CP_age.vue')
+            },
+            //性别
+            {
+              path: 'sex',
+              component: () => import('../components/CustomerPortrait_item/CP_sex.vue')
+            },
+            //保单
+            {
+              path: 'Policy',
+              component: () => import('../components/CustomerPortrait_item/CP_Policy.vue')
+            },
+            //保费
+            {
+              path: 'premium',
+              component: () => import('../components/CustomerPortrait_item/CP_premium.vue')
+            },
+            //保费总额
+            {
+              path: 'total',
+              component: () => import('../components/CustomerPortrait_item/CP_total.vue')
+            },
+            //偏好
+            {
+              path: 'preference',
+              component: () => import('../components/CustomerPortrait_item/CP_preference.vue')
+            },
+            //服务状态
+            {
+              path: 'service',
+              component: () => import('../components/CustomerPortrait_item/CP_service.vue')
+            },
+          ]
         },
         // 客户查询
         {
@@ -41,12 +83,58 @@ export default new Router({
         // 家庭画像
         {
           path: 'familyCustomerPortrait',
-          component: () => import('../views/familyCustomerPortrait')
+          component: () => import('../views/familyCustomerPortrait'),
+          children: [
+            //级别
+            {
+              path: '',
+              component: () => import('../components/familyCustomerPortrait_item/CP_level.vue')
+            },
+            //类别
+            {
+              path: 'category',
+              component: () => import('../components/familyCustomerPortrait_item/CP_category.vue')
+            },
+            //人口
+            {
+              path: 'population',
+              component: () => import('../components/familyCustomerPortrait_item/CP_population.vue')
+            },
+            //保单
+            {
+              path: 'Policy',
+              component: () => import('../components/familyCustomerPortrait_item/CP_Policy.vue')
+            },
+            //主险保费
+            {
+              path: 'premium',
+              component: () => import('../components/familyCustomerPortrait_item/CP_premium.vue')
+            },
+            //主险保费总额
+            {
+              path: 'total',
+              component: () => import('../components/familyCustomerPortrait_item/CP_total.vue')
+            },
+            //偏好
+            {
+              path: 'preference',
+              component: () => import('../components/familyCustomerPortrait_item/CP_preference.vue')
+            },
+            //服务状态
+            {
+              path: 'service',
+              component: () => import('../components/familyCustomerPortrait_item/CP_service.vue')
+            },
+          ]
         },
         // 家庭查询
         {
           path: 'familyCustomerInquiryI',
           component: () => import('../views/familyCustomerInquiryI')
+        },
+        {
+          path: 'InsuranceDetails',
+          component: () => import('../components/InsuranceDetails/InsuranceDetails.vue')
         },
         // 保障分析
         {
@@ -56,6 +144,10 @@ export default new Router({
         {
           path: 'SAbaozhangxiangqing',
           component: () => import('../components/SecurityAnalysis/SAbaozhangxiangqing.vue')
+        },
+        {
+          path: 'SAbaozhangxiangqing1',
+          component: () => import('../components/SecurityAnalysis/SAbaozhangxiangqing1.vue')
         },
         {
           path: 'SAbaozhangxiangqing2',

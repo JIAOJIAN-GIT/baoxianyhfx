@@ -1,5 +1,5 @@
 <template>
-  <!-- 客户级别画像 -->
+  <!-- 客户人口画像 -->
   <div class="box1">
     <el-card>
       <echartsbox
@@ -41,20 +41,10 @@ export default {
     return {
       option1: {
         // 表题
-        title: [
-          {
-            text: "全省家庭客户类别统计",
-            left: "left",
-          },
-          {
-            text: "",
-            subtext: "单位 / 万",
-            subtextStyle: {
-              fontWeight: "bold",
-            },
-            left: "right",
-          },
-        ],
+        title: {
+          text: "全省家庭客户人口统计",
+          left: "left",
+        },
 
         // 提示框
         tooltip: {},
@@ -71,7 +61,7 @@ export default {
         },
         grid: {
           left: "1%",
-          right: "5%",
+          right: "10%",
           bottom: "5%",
           containLabel: true,
         },
@@ -87,7 +77,7 @@ export default {
       },
       option2: {
         title: {
-          text: "各家庭客户类别占比",
+          text: "各家庭客户人口占比",
           left: "left",
         },
         tooltip: {
@@ -135,7 +125,7 @@ export default {
       option3: {
         // 表题
         title: {
-          text: "各地区家庭客户类别分布",
+          text: "各地区家庭客户人口分布",
           left: "left",
         },
         // 提示框
@@ -173,6 +163,7 @@ export default {
         },
         grid: {
           left: "1%",
+          right: "2%",
           bottom: "8%",
           containLabel: true,
         },
@@ -254,7 +245,7 @@ export default {
         },
         grid: {
           left: "1%",
-          right: "5%",
+          right: "2%",
           bottom: "8%",
           containLabel: true,
         },

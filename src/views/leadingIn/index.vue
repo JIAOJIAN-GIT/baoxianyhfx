@@ -141,7 +141,7 @@
       <div class="css1">
         批量导入完成，成功导入客户数据{{ numberList.success }}
       </div>
-      <div>图部分</div>
+      <!-- <div>图部分</div> -->
       <el-button class="btn btn1" type="primary" @click="btn3">完成 </el-button>
     </div>
   </el-card>
@@ -194,7 +194,7 @@ export default {
       this.index1 = 2;
     },
     btn3() {
-      this.index1 = 0;
+      this.index1 = 3;
       this.$router.push("/home/CustomerInquiryI");
     },
     handleClick(tab, event) {

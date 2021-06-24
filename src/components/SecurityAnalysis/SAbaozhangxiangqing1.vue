@@ -6,13 +6,22 @@
           <b>{{ name }}</b> 保障详情
         </div>
       </el-col>
-      <el-col v-if="indexState == '1'">
-        <el-col>
+      <el-col>
+        <el-col v-for="(item, i) in tableData" :key="i">
           <div style="margin: 20px auto; width: 95%">
-            <div class="title">{{ title }}</div>
+            <el-col>
+              <el-col class="massge_top" :span="3">
+                <span>投保人</span>
+                <span>{{ item[0].app.data.投保人姓名 }}</span>
+              </el-col>
+              <el-col class="massge_top" :span="3">
+                <span>与客户关系</span>
+                <span>{{ item[0].app.data.投被保人关系 }}</span>
+              </el-col>
+            </el-col>
             <el-table
               ref="multipleTable"
-              :data="tableData"
+              :data="item"
               border
               stripe
               :header-cell-style="{
@@ -153,35 +162,8 @@ export default {
       name: "张天爱",
       title: "",
       ind: "1",
-      tableData1: [
-        {
-          Icpol: {
-            a: {
-              date: "2016-05-03",
-              name: "王小虎",
-              address: "上海市普陀区金沙江路 1518 弄",
-            },
-            a1: {
-              date: "2016-05-03",
-              name: "王小虎",
-              address: "上海市普陀区金沙江路 1518 弄",
-            },
-          },
-        },
-      ],
-      tableData2: [],
-      tableData: [
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-      ],
+
+      tableData: [],
     };
   },
   methods: {
@@ -189,21 +171,43 @@ export default {
       this.multipleSelection = val;
     },
     requestData(id) {
-      this.$axios.get(`/users/${id}`).then((res) => {
-        // let a = Object.values(res.data.Icpol);
-        // let b = a.reduce(
-        //   (r, x) => ((r[x.appntno] || (r[x.appntno] = [])).push(x), r),
-        //   {}
-        // );
-        // let c = Object.keys(b).map((x) => b[x]);
-        // this.tableData2 = c;
-        console.log("1111111111111111111");
+      let params = {
+        page: "0",
+        page_size: "20",
+        customer: id,
+      };
+      this.$axios({ url: "/bills", params }).then((res) => {
+        console.log(res.data.data);
+        let b = res.data.data.reduce(
+          (r, x) => (
+            (r[x.app.data.投保人姓名] || (r[x.app.data.投保人姓名] = [])).push(
+              x
+            ),
+            r
+          ),
+          {}
+        );
+        let c = Object.keys(b).map((x) => b[x]);
+        this.tableData = c;
+        console.log(this.tableData);
       });
+      // this.$axios.get(`/users/${id}`).then((res) => {
+      //   let a = Object.values(res.data.data.Icpol);
+      //   let b = a.reduce(
+      //     (r, x) => ((r[x.appntno] || (r[x.appntno] = [])).push(x), r),
+      //     {}
+      //   );
+      //   let c = Object.keys(b).map((x) => b[x]);
+      //   this.tableData2 = c;
+      //   // console.log(res.data.data.Icpol);
+      //   // console.log("1111111111111111111");
+      // });
     },
     requestData2(params) {
       this.$axios({ url: "/bills", params }).then((res) => {
-        this.tableData = res.data.data;
+        this.tableData[0] = res.data.data;
         console.log(res.data.data);
+        console.log(this.tableData);
       });
     },
 
@@ -222,6 +226,7 @@ export default {
     // console.log(this.$route.query.id);
     // console.log(this.indexState);
     this.title = this.$route.query.prdtype;
+    this.name = this.$route.query.name;
     let query = {
       page: "0",
       page_size: "20",

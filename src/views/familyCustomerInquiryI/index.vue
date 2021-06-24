@@ -5,7 +5,7 @@
     <el-card body-style="padding: 10px 0px;">
       <div class="title_sou">
         <div class="font_title">客户查询</div>
-        <el-button type="primary" @click="open">高级搜索</el-button>
+        <el-button type="primary" @click="dialog = true">高级搜索</el-button>
       </div>
       <el-divider></el-divider>
       <!-- 搜索内容 -->
@@ -23,30 +23,46 @@
             placeholder="个险"
             style="width: 100px"
           >
-            <el-option label="" value="shanghai"></el-option>
+            <el-option
+              v-for="(item, i) in FData.channels.data"
+              :key="i"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="城市">
           <el-select
-            v-model="params.region"
+            v-model="params.cities"
             placeholder="太原"
             style="width: 120px"
           >
-            <el-option label="" value="呼和浩特"></el-option>
+            <el-option
+              v-for="(item, i) in FData.cities.data"
+              :key="i"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="区">
           <el-select v-model="params.region" placeholder="小店区">
-            <el-option label="" value="shanghai"></el-option>
+            <el-option
+              v-for="(item, i) in FData.regions.data"
+              :key="i"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="客户级别">
           <el-select
             v-model="params.level"
-            placeholder="钻石客户"
+            placeholder="1星级家庭"
             style="width: 120px"
           >
-            <el-option label="区域一" value="shanghai"></el-option>
+            <el-option
+              v-for="(item, i) in FData.family_levels.data"
+              :key="i"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="服务">
@@ -55,7 +71,11 @@
             placeholder="在职"
             style="width: 100px"
           >
-            <el-option label="区域一" value="shanghai"></el-option>
+            <el-option
+              v-for="(item, i) in FData.servstates.data"
+              :key="i"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item width="200px">
@@ -69,7 +89,7 @@
       </el-form>
     </el-card>
     <!-- 数据展示 -->
-    <el-card class="shu" body-style="padding: 10px 0px;">
+    <el-card class="shu" body-style="padding: 10px 0px">
       <div class="content_title">
         <div>客户列表</div>
         <div>
@@ -90,7 +110,7 @@
           backgroundColor: '#03a7f0',
           color: '#fff',
         }"
-        height="600"
+        height="570"
         tooltip-effect="dark"
         style="width: 100%"
         @selection-change="handleSelectionChange"
@@ -175,9 +195,21 @@
       <div class="content_title1">
         <div>
           <div>
-            <el-checkbox v-model="value" label="全选" border></el-checkbox>
-            <el-checkbox v-model="value" label="反选" border></el-checkbox>
-            <el-select style="width: 90px" v-model="value" placeholder="请选择">
+            <el-button
+              icon="el-icon-check"
+              :indeterminate="isIndeterminate"
+              v-model="checkAll"
+              @click="selAll()"
+              >全选
+            </el-button>
+            <el-button icon="el-icon-finished" @click="unselAll(tableData)"
+              >反选
+            </el-button>
+            <el-select
+              style="width: 190px"
+              v-model="value"
+              placeholder="请选择"
+            >
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -202,6 +234,41 @@
         </div>
       </div>
     </el-card>
+
+    <!-- 弹框高级搜索 -->
+    <el-drawer
+      title="高级搜索"
+      :before-close="handleClose"
+      :visible.sync="dialog"
+      size="40%"
+      direction="btt"
+      custom-class="demo-drawer"
+      ref="drawer"
+    >
+      <div class="demo-drawer__content">
+        <el-form :model="form" class="form2">
+          <el-form-item
+            :label-width="formLabelWidth"
+            v-for="(item, i) in formdata"
+            :key="i"
+          >
+            <div>{{ item.name }} :</div>
+            <el-select :placeholder="item.data[0]">
+              <el-option
+                v-for="(text, i) in item.data"
+                :key="i"
+                :value="text"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div class="demo-drawer__footer">
+          <el-link type="primary">清楚条件</el-link>
+          <el-button @click="cancelForm">取 消</el-button>
+          <el-button type="primary" @click="querydata2">确 定</el-button>
+        </div>
+      </div>
+    </el-drawer>
   </div>
 </template>
 
@@ -210,11 +277,14 @@ export default {
   data() {
     return {
       input: "",
-      value: "da",
+      value: "",
+      isIndeterminate: "",
+      checkAll: "",
+      // 查询参数
       params: {
         name: "", //名字
         channel: "", //渠道
-        region: "", //城市
+        cities: "", //城市
         region: "", //地区
         level: "", //级别
         state: "", //服务
@@ -222,28 +292,12 @@ export default {
         page_size: 10, //一页条数
         total: 0, //总页数
       },
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕",
-        },
-        {
-          value: "选项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
-        },
-      ],
+      // 高级查询数据
+      formdata: [],
+      options: [{ label: "批量操作", value: "批量操作" }],
+      // 查询数据
+      FData: [],
+      // 表数据
       tableData: [],
       // tableData: [
       //   {
@@ -266,34 +320,100 @@ export default {
       //     },
       //   },
       // ],
+
+      // 当表格选择项发生变化时
       multipleSelection: [],
+
+      // 弹框
+      dialog: false,
+      loading: false,
+
+      form: {
+        name: "",
+        region: "",
+        date1: "",
+        date2: "",
+        delivery: false,
+        type: [],
+        resource: "",
+        desc: "",
+      },
+      formLabelWidth: "80px",
+      timer: null,
     };
   },
+  watch: {
+    // 监听表格多选事件
+    tableData: {
+      handler(value) {
+        if (this.checkAll) {
+          this.tableData.forEach((row) => {
+            if (row) {
+              this.$refs.multipleTable.toggleAllSelection(row, true);
+            }
+          });
+        }
+      },
+      deep: true,
+    },
+  },
   methods: {
+    selAll() {
+      if (this.$refs.multipleTable.selection.length < this.tableData.length) {
+        this.checkAll = true;
+      } else {
+        this.checkAll = false;
+      }
+      this.$refs.multipleTable.toggleAllSelection();
+    },
+    //表格内checkbox触发的全选按钮状态变化
+    selRow(val) {
+      if (val.length < this.tableData.length && val.length > 0) {
+        this.isIndeterminate = true;
+      } else if (val.length === this.tableData.length) {
+        this.isIndeterminate = false;
+        this.checkAll = true;
+      } else if (val.length === 0) {
+        this.isIndeterminate = false;
+        this.checkAll = false;
+      }
+    },
+    unselAll(rows) {
+      if (rows) {
+        rows.forEach((row) => {
+          this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
     //详情
     handleClick(row) {
-      this.$router.push(`/home/SAbaozhangxiangqing?id=${row.id}`);
+      // this.$store.commit("saveIndexState", "0");
+      this.$router.push(`/home/InsuranceDetails`);
       console.log(row.id);
     },
     // 请求数据
-    requestData(params1) {
+    requestData(params) {
+      let date = {};
+      for (let item in params) {
+        if (params[item] !== "") {
+          date[item] = params[item];
+        }
+      }
+      console.log(date);
       this.tableData = [];
       this.$axios({
         url: "/users",
-        params: {
-          name: params1.name,
-          channel: params1.channel,
-          state: params1.state,
-          region: params1.region,
-          page: params1.page,
-          page_size: params1.page_size,
-        },
+        params: date,
       })
         .then((res) => {
           this.params.total = res.data.total;
           let obj = Object.values(res.data.data.Customer);
+          // 整体数据
           this.tableData = obj;
-          console.log(res);
+
+          console.log(obj);
         })
         .catch(function (error) {
           console.log(error);
@@ -301,8 +421,8 @@ export default {
     },
     //查询事件
     querydata() {
-      // this.$axios.get('')
-      console.log(this.formDta);
+      this.params.page = "1";
+      this.params.page_size = "10";
       this.requestData(this.params);
     },
     //重置事件
@@ -339,21 +459,34 @@ export default {
       this.requestData(this.params);
     },
     // 弹框
-    open() {
-      this.$alert("这是一段内容", "标题名称", {
-        title: "高级搜索",
-        closeOnClickModal: true,
-        confirmButtonText: "确定",
-        callback: (action) => {
-          this.$message({
-            type: "info",
-            message: `action: ${action}`,
-          });
-        },
-      });
+    handleClose(done) {
+      this.$confirm("确认关闭？")
+        .then((_) => {
+          done();
+        })
+        .catch((_) => {
+          console.log("quxiao");
+        });
+    },
+    //查询事件
+    querydata2() {
+      // this.params.page = "1";
+      // this.params.page_size = "10";
+      // this.requestData(this.params);
+      // this.cancelForm();
+      console.log(this.form);
+    },
+    cancelForm() {
+      this.loading = false;
+      this.dialog = false;
     },
   },
   mounted: function () {
+    this.$axios.get("/dictionary").then((res) => {
+      // console.log(res.data);
+      this.FData = res.data.family;
+      this.formdata = Object.values(res.data.family);
+    });
     this.requestData(this.params);
   },
 };
@@ -387,6 +520,7 @@ export default {
 
 /* 下部分 */
 .shu {
+  margin-top: 25px;
   position: absolute;
   left: 0px;
   right: 0px;
@@ -418,5 +552,23 @@ export default {
 }
 .el-table-column--selection {
   background-color: #03a7f0;
+}
+
+.form2 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+}
+.form2 > .el-form-item {
+  margin: 0px 0px 10px 8px;
+  display: flex;
+  flex-flow: column nowrap;
+}
+.demo-drawer__footer {
+  text-align: right;
+  padding: 50px 40px 0px 0px;
+}
+.demo-drawer__footer > .el-link {
+  margin-right: 10px;
 }
 </style>

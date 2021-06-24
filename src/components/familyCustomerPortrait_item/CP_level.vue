@@ -2,10 +2,19 @@
   <!-- 客户级别画像 -->
   <div class="box1">
     <el-card>
+      <el-row>
+        <el-col>
+          <div class="title">全省各等级家庭数统计</div>
+        </el-col>
+        <el-col :span="12">
+          <div>今年截止本月家庭客户总数</div>
+          <div>1,543,233</div>
+        </el-col>
+      </el-row>
       <echartsbox
         :id="'bargraph'"
         :data="option1"
-        style="height: 70vh; width: 100%"
+        style="height: 60vh; width: 100%"
       ></echartsbox>
     </el-card>
     <div>
@@ -28,7 +37,7 @@
       <echartsbox
         :id="'bargraph4'"
         :data="option4"
-        style="height: 70vh; width: 100%"
+        style="height: 68vh; width: 100%"
       ></echartsbox>
     </el-card>
   </div>
@@ -41,45 +50,38 @@ export default {
     return {
       option1: {
         // 表题
-        title: [
-          {
-            text: "全省家庭客户类别统计",
-            left: "left",
-          },
-          {
-            text: "",
-            subtext: "单位 / 万",
-            subtextStyle: {
-              fontWeight: "bold",
-            },
-            left: "right",
-          },
-        ],
-
+        title: {
+          show: false,
+        },
         // 提示框
         tooltip: {},
+        // 提示信息/分类标题
+        legend: {
+          show: false,
+        },
         // 整体颜色
         color: "#3aa0ff",
         // X轴
         xAxis: {
-          data: ["一星家庭", "二星家庭", "三星家庭", "四星家庭", "五星家庭"],
-          type: "category",
+          type: "value",
         },
         // Y轴
         yAxis: {
-          type: "value",
+          type: "category",
+          data: [],
         },
+        // 调整图表盒子离周边位置
         grid: {
           left: "1%",
           right: "5%",
-          bottom: "5%",
+          bottom: "8%",
           containLabel: true,
         },
         // 数据
         series: [
           {
             name: "客户数量",
-            data: [320000, 150000, 80000, 20000, 10000],
+            data: [],
             type: "bar",
             // barWidth: 30,
           },
@@ -87,7 +89,7 @@ export default {
       },
       option2: {
         title: {
-          text: "各家庭客户类别占比",
+          text: "各等级家庭客户数占比",
           left: "left",
         },
         tooltip: {
@@ -105,13 +107,7 @@ export default {
           {
             type: "pie",
             radius: "50%",
-            data: [
-              { value: 1048, name: "一星家庭" },
-              { value: 735, name: "二星家庭" },
-              { value: 580, name: "三星家庭" },
-              { value: 484, name: "四星家庭" },
-              { value: 300, name: "五星家庭" },
-            ],
+            data: [],
             itemStyle: {
               normal: {
                 label: {
@@ -135,7 +131,7 @@ export default {
       option3: {
         // 表题
         title: {
-          text: "各地区家庭客户类别分布",
+          text: "各地区等级家庭客户分布",
           left: "left",
         },
         // 提示框
@@ -157,100 +153,7 @@ export default {
         yAxis: {
           type: "category",
           axisTick: { show: false },
-          data: [
-            "阳泉",
-            "晋",
-            "长治",
-            "肃州",
-            "忻州",
-            "忻州",
-            "陆良",
-            "吕梁",
-            "太原",
-            "运城",
-            "天津",
-          ],
-        },
-        grid: {
-          left: "1%",
-          bottom: "8%",
-          containLabel: true,
-        },
-        // 数据
-        series: [
-          {
-            name: "一星家庭",
-            data: [
-              10000, 15000, 80000, 20000, 100000, 10000, 15000, 80000, 20000,
-              100000, 34522,
-            ],
-            type: "bar",
-            // barWidth: 30,
-          },
-          {
-            name: "二星家庭",
-            data: [
-              32000, 15000, 80000, 20000, 10000, 10000, 15000, 80000, 20000,
-              100000, 45653,
-            ],
-            type: "bar",
-            // barWidth: 30,
-          },
-          {
-            name: "三星家庭",
-            data: [
-              10000, 15000, 80000, 20000, 100000, 54465, 32000, 15000, 80000,
-              20000, 10000,
-            ],
-            type: "bar",
-            // barWidth: 30,
-          },
-          {
-            name: "四星家庭",
-            data: [
-              32000, 15000, 10000, 15000, 80000, 20000, 100000, 54664, 80000,
-              20000, 10000,
-            ],
-            type: "bar",
-            // barWidth: 30,
-          },
-          {
-            name: "五星家庭",
-            data: [
-              32000, 15000, 10000, 15000, 80000, 20000, 100000, 54664, 80000,
-              20000, 10000,
-            ],
-            type: "bar",
-            // barWidth: 30,
-          },
-        ],
-      },
-      option4: {
-        // 表题
-        title: {
-          text: "各类别家庭客户客户等级分布",
-          left: "left",
-        },
-        // 提示框
-        tooltip: {},
-        // 整体颜色
-        // color: "#3aa0ff",
-        legend: {
-          orient: "horizontal",
-          left: "center",
-          itemWidth: 8,
-          itemHeight: 8,
-          bottom: 0,
-        },
-        // X轴
-        xAxis: {
-          type: "value",
-        },
-        // Y轴
-        yAxis: {
-          type: "category",
-          axisTick: { show: false },
-          data: ["一星家庭", "二星家庭", "三星家庭", "四星家庭", "五星家庭"],
+          data: [],
         },
         grid: {
           left: "1%",
@@ -259,40 +162,63 @@ export default {
           containLabel: true,
         },
         // 数据
-        series: [
-          {
-            name: "普通客户",
-            data: [10000, 15000, 80000, 20000, 100000],
-            type: "bar",
-            // barWidth: 30,
-          },
-          {
-            name: "普通客户",
-            data: [10000, 15000, 80000, 20000, 100000],
-            type: "bar",
-            // barWidth: 30,
-          },
-          {
-            name: "普通客户",
-            data: [10000, 15000, 80000, 20000, 100000],
-            type: "bar",
-            // barWidth: 30,
-          },
-          {
-            name: "普通客户",
-            data: [10000, 15000, 80000, 20000, 100000],
-            type: "bar",
-            // barWidth: 30,
-          },
-          {
-            name: "普通客户",
-            data: [10000, 15000, 80000, 20000, 100000],
-            type: "bar",
-            // barWidth: 30,
-          },
-        ],
+        series: [],
+      },
+      option4: {
+        // 表题
+        title: {
+          text: "各等级家庭客户级别分布",
+          left: "left",
+        },
+        // 提示框
+        tooltip: {},
+        // 整体颜色
+        // color: "#3aa0ff",
+        legend: {
+          orient: "horizontal",
+          left: "center",
+          itemWidth: 8,
+          itemHeight: 8,
+          bottom: 0,
+        },
+        // X轴
+        xAxis: {
+          type: "value",
+        },
+        // Y轴
+        yAxis: {
+          type: "category",
+          axisTick: { show: false },
+          data: [],
+        },
+        grid: {
+          left: "1%",
+          right: "5%",
+          bottom: "8%",
+          containLabel: true,
+        },
+        // 数据
+        series: [],
       },
     };
+  },
+  mounted: function () {
+    this.$axios.get("/family_statis").then((res) => {
+      // console.log(res);
+      let data = res.data;
+      console.log(data);
+      this.option1.yAxis.data = data.option1.data;
+      this.option1.series[0].data = data.option1.value;
+      this.option2.series[0].data = data.option1.value.map((item, i) => ({
+        value: item,
+        name: data.option1.data[i],
+      }));
+      this.option3.yAxis.data = data.option2.region;
+      this.option3.series = data.option2.series;
+      this.option4.yAxis.data = data.option3.region;
+      this.option4.series = data.option3.series;
+      // series
+    });
   },
   components: {
     echartsbox,
@@ -318,5 +244,20 @@ export default {
 }
 .el-divider {
   margin: 0px auto;
+}
+.el-col:nth-of-type(2) {
+  text-align: left;
+  padding-left: 20px;
+  line-height: 35px;
+}
+.el-col > div:nth-of-type(2) {
+  font-size: 20px;
+  font-weight: 600;
+}
+.title {
+  text-align: left;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 30px;
 }
 </style>

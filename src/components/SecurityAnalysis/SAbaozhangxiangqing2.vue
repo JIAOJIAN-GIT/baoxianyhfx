@@ -4,28 +4,12 @@
       <el-col :span="24">
         <div class="grid-content">保障详情</div>
         <div style="margin: 0px auto; width: 80%">
-          <el-row>
-            <el-col class="title" :span="24"> 基本信息 </el-col>
+          <el-row v-for="(item, i) in baodanData" :key="i">
+            <el-col class="title" :span="24"> {{ item.name }} </el-col>
             <el-col :span="24" class="fllex">
-              <div class="massge_top">
-                <div>姓名</div>
-                <div>张天爱</div>
-              </div>
-              <div class="massge_top">
-                <div>姓名</div>
-                <div>张天爱</div>
-              </div>
-              <div class="massge_top">
-                <div>姓名</div>
-                <div>张天爱</div>
-              </div>
-              <div class="massge_top">
-                <div>姓名</div>
-                <div>张天爱</div>
-              </div>
-              <div class="massge_top">
-                <div>姓名</div>
-                <div>张天爱</div>
+              <div v-for="(item2, i) in item.data" :key="i" class="massge_top">
+                <div>{{ i }}</div>
+                <div>{{ item2 == "" ? "未知" : item2 }}</div>
               </div>
             </el-col>
           </el-row>
@@ -41,6 +25,16 @@ export default {
     return {};
   },
   methods: {},
+  computed: {
+    baodanData() {
+      return this.$store.state.baodanData;
+    },
+  },
+  mounted: function () {
+    console.log(this.baodanData);
+
+    // console.log(this.$route.params);
+  },
 };
 </script>
 
@@ -81,7 +75,7 @@ export default {
   width: 100px;
   font-size: 14px;
   color: #fff;
-  text-align: left;
+  text-align: center;
   padding: 15px 10px;
   background-color: #0297d7;
 }
