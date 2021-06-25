@@ -81,7 +81,7 @@
         <img src="../../assets/img/u495.svg" alt="" />
         产品中心
       </template>
-      <el-menu-item> 产品信息 </el-menu-item>
+      <el-menu-item index="/home/ProductInformation"> 产品信息 </el-menu-item>
       <el-menu-item> 添加产品 </el-menu-item>
       <el-menu-item> 产品概览 </el-menu-item>
     </el-submenu>

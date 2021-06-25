@@ -165,7 +165,18 @@ export default new Router({
         {
           path: 'leadingIn2',
           component: () => import('../views/leadingIn/leadingIn2.vue')
-        }
+        },
+        // ------------------------产品中心
+        //产品信息
+        {
+          path: 'ProductInformation',
+          component: () => import('../views/ProductInformation')
+        },
+        //产品信息
+        {
+          path: 'ProductInformation_item',
+          component: () => import('../components/ProductInformation')
+        },
       ]
     }
   ]
