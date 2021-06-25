@@ -212,7 +212,7 @@ export default {
       input: "qinfshu",
       lengthShu: "2",
       formDate: {
-        name: "30bd36467a16a85b",
+        name: "",
         isinsured: "1",
         id: "",
         prdtype: "",
@@ -373,7 +373,7 @@ export default {
               this.tableData.push(obj3);
             });
           } else if (obj.length >= 2) {
-            this.open();
+            this.formDate.name == "" ? "" : this.open();
           } else {
             this.open1();
           }

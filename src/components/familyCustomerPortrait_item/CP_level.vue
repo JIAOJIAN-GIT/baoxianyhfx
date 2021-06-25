@@ -8,7 +8,7 @@
         </el-col>
         <el-col :span="12">
           <div>今年截止本月家庭客户总数</div>
-          <div>1,543,233</div>
+          <div>{{ totalName }}</div>
         </el-col>
       </el-row>
       <echartsbox
@@ -48,6 +48,7 @@ import echartsbox from "../echartsbox.vue";
 export default {
   data() {
     return {
+      totalName: "",
       option1: {
         // 表题
         title: {
@@ -207,6 +208,7 @@ export default {
       // console.log(res);
       let data = res.data;
       console.log(data);
+      this.totalName = data.total;
       this.option1.yAxis.data = data.option1.data;
       this.option1.series[0].data = data.option1.value;
       this.option2.series[0].data = data.option1.value.map((item, i) => ({

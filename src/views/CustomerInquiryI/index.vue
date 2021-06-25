@@ -419,7 +419,7 @@ export default {
           obj = obj.map((x) => res.data.data.Customer[x]);
           this.tableData = obj;
 
-          console.log(obj);
+          console.log(this.tableData.length);
         })
         .catch(function (error) {
           console.log(error);

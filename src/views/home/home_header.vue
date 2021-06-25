@@ -25,7 +25,7 @@
         </div>
       </el-header>
       <el-main style="position: relative">
-        <router-view></router-view>
+        <router-view v-if="showView"></router-view>
         <!-- <content1></content1> -->
       </el-main>
     </el-container>
@@ -37,7 +37,9 @@ import sidebar from "./home_sidebar.vue";
 // import content1 from "../../components/content1";
 export default {
   data() {
-    return {};
+    return {
+      showView: true,
+    };
   },
   computed: {
     ifshow() {
@@ -57,9 +59,12 @@ export default {
     },
     // 刷新事件
     Refresh() {
-      let url = this.$store.state.pathName;
-      this.$router.push(url);
-      console.log(this.Refresh);
+      this.showView = false; // 通过v-if移除router-view节点
+      this.$nextTick(() => {
+        this.showView = true; // DOM更新后再通过v-if添加router-view节点
+      });
+      // this.$router.go(0);
+      // console.log(this.Refresh);
     },
   },
 };

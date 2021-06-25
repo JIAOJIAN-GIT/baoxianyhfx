@@ -3,6 +3,7 @@
   <el-menu
     unique-opened
     default-active="1"
+    :default-openeds="opends"
     active-text-color="rgba(0, 121, 254, 1)"
     router
     class="font_title"
@@ -100,6 +101,7 @@ export default {
   data() {
     return {
       activeClass: "/home",
+      opends: ["1"],
     };
   },
   methods: {
