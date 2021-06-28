@@ -177,6 +177,28 @@ export default new Router({
           path: 'ProductInformation_item',
           component: () => import('../components/ProductInformation')
         },
+        //添加产品
+        {
+          path: 'addProduct',
+          component: () => import('../views/ProductInformation/addProduct.vue')
+        },
+        //产品统计
+        {
+          path: 'Statistics',
+          component: () => import('../views/ProductInformation/Statistics.vue')
+        },
+        //--------------------账号设置
+        //产品统计
+        {
+          path: 'accountNumber',
+          component: () => import('../views/accountNumber')
+        },
+        //产品统计
+        {
+          path: 'addaccountNumber',
+          name: "addaccountNumber",
+          component: () => import('../views/accountNumber/addaccountNumber.vue')
+        },
       ]
     }
   ]

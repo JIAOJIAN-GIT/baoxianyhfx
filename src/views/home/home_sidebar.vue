@@ -82,14 +82,14 @@
         产品中心
       </template>
       <el-menu-item index="/home/ProductInformation"> 产品信息 </el-menu-item>
-      <el-menu-item> 添加产品 </el-menu-item>
-      <el-menu-item> 产品概览 </el-menu-item>
+      <el-menu-item index="/home/addProduct"> 添加产品 </el-menu-item>
+      <el-menu-item index="/home/Statistics"> 产品统计 </el-menu-item>
     </el-submenu>
     <el-menu-item>
       <img src="../../assets/img/u487.svg" alt="" />
       保险方案推荐</el-menu-item
     >
-    <el-menu-item>
+    <el-menu-item index="/home/accountNumber">
       <img src="../../assets/img/u501.svg" alt="" />
       账号设置</el-menu-item
     >

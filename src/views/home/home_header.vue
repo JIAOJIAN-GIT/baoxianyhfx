@@ -52,37 +52,7 @@ export default {
   components: {
     sidebar,
   },
-  mounted: function () {
-    let a = [
-      { appntno: "jiao", saa: "214" },
-      { appntno: "jiao", saa: "214" },
-      { appntno: "jiao", saa: "214" },
-      { appntno: "jiao1", saa: "214" },
-      { appntno: "jiao1", saa: "214" },
-      { appntno: "jiao1", saa: "214" },
-      { appntno: "jiao", saa: "214" },
-      { appntno: "jiao2", saa: "214" },
-      { appntno: "jiao2", saa: "214" },
-      { appntno: "jiao2", saa: "214" },
-    ];
-    let b = a.reduce(
-      (r, x) => ((r[x.appntno] || (r[x.appntno] = [])).push(x), r),
-      {}
-    );
-    let c = Object.keys(b).map((x) => b[x]);
-    (function findLongest(entries) {
-      return entries.reduce(function (prev, cur) {
-        console.log(prev);
-        return cur.length > prev.length ? cur : prev;
-      }, "");
-    })(c);
-    console.log("aaaaaaaaaaaaaaaaaaa");
-    console.log(a);
-    console.log("bbbbbbbbbbbbbbbbbbbbbbbb");
-    console.log(b);
-    console.log("ccccccccccccccccccccccccc");
-    console.log(c);
-  },
+  mounted: function () {},
   methods: {
     // 返回事件
     back() {

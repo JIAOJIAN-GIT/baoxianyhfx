@@ -4,18 +4,24 @@
     <!-- 搜索部分 -->
     <el-card body-style="padding: 10px 0px;">
       <div class="title_sou">
-        <div class="font_title">产品查询</div>
+        <div class="font_title">账号查询</div>
       </div>
       <el-divider></el-divider>
       <!-- 搜索内容 -->
       <el-form :inline="true" :model="params" class="content_sou">
         <el-form-item label="输入查询">
-          <el-input v-model="formDate.name" placeholder="产品名称"></el-input>
+          <el-input v-model="formDate.name" placeholder="姓名"></el-input>
         </el-form-item>
-        <el-form-item label="产品编号">
-          <el-input v-model="formDate.number" placeholder="产品编号"></el-input>
+        <el-form-item label="账号类别">
+          <el-select v-model="formDate.level" placeholder="全部">
+            <!-- <el-option
+              v-for="(item, i) in FData.customer_levels.data"
+              :key="i"
+              :value="item"
+            ></el-option> -->
+          </el-select>
         </el-form-item>
-        <el-form-item label="产品类别">
+        <el-form-item label="所属部门">
           <el-select v-model="formDate.level" placeholder="全部">
             <!-- <el-option
               v-for="(item, i) in FData.customer_levels.data"
@@ -37,7 +43,10 @@
     <!-- 数据展示 -->
     <el-card class="shu" body-style="padding: 10px 0px">
       <div class="content_title">
-        <div class="font_title">产品列表</div>
+        <div class="font_title">账号列表</div>
+        <el-button type="primary" @click="addaccountNumber"
+          ><i class="el-icon-plus"></i>添加</el-button
+        >
       </div>
       <!-- 表格 -->
       <div class="divcol">
@@ -47,7 +56,8 @@
           border
           stripe
           :header-cell-style="{
-            backgroundColor: '#f8bd70',
+            backgroundColor: '#f5f5f5',
+            fontWeight: 600,
             color: '#666',
           }"
           height="570"
@@ -66,35 +76,62 @@
           <el-table-column
             align="center"
             prop="name"
-            label="产品名称"
+            label="姓名"
           ></el-table-column>
           <el-table-column
             align="center"
             prop="region"
-            label="产品编号"
+            label="账号类别"
           ></el-table-column>
           <el-table-column
             align="center"
             prop="channel"
-            label="产品类别"
+            label="所属部门"
           ></el-table-column>
           <el-table-column
             align="center"
             prop="level"
-            label="产品子类"
+            label="当前职务"
           ></el-table-column>
           <el-table-column
             align="center"
             prop="sex"
-            label="产品简介"
+            label="登陆账号"
           ></el-table-column>
-          <el-table-column align="center" fixed="right" label="操作" width="80">
+          <el-table-column
+            align="center"
+            prop="sex"
+            label="登陆密码"
+          ></el-table-column>
+          <el-table-column align="center" prop="sex" label="启用">
+            <el-switch
+              v-model="value"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+            >
+            </el-switch>
+          </el-table-column>
+          <el-table-column
+            align="center"
+            fixed="right"
+            label="操作"
+            width="250"
+          >
             <template align="center" slot-scope="scope">
+              <el-button @click="edit(scope.row)" type="text" size="small"
+                ><i class="el-icon-edit"></i>编辑</el-button
+              >
               <el-button
-                @click="handleClick(scope.row)"
+                @click="jurisdiction(scope.row)"
                 type="text"
                 size="small"
-                >详情</el-button
+                ><i class="el-icon-setting"></i>权限</el-button
+              >
+              <el-button @click="frozen(scope.row)" type="text" size="small"
+                ><i class="el-icon-circle-close"></i>冻结</el-button
+              >
+              <el-button @click="delete1(scope.row)" type="text" size="small"
+                ><i class="el-icon-delete"></i>删除</el-button
               >
             </template>
           </el-table-column>
@@ -253,12 +290,31 @@ export default {
         this.$refs.multipleTable.clearSelection();
       }
     },
-    //详情
-    handleClick(row) {
-      this.$store.commit("saveIndexState", "0");
-      this.$router.push(
-        `/home/ProductInformation_item?id=${row.id}&name=${row.name}`
-      );
+    //添加
+    addaccountNumber() {
+      this.$router.push({
+        name: "addaccountNumber",
+        params: { type: "1" },
+      });
+    },
+    //编辑
+    edit(row) {
+      this.$router.push({
+        name: "addaccountNumber",
+        params: { type: "0", data: row },
+      });
+      console.log(row.id);
+    },
+    //权限
+    jurisdiction(row) {
+      console.log(row.id);
+    },
+    //冻结
+    frozen(row) {
+      console.log(row.id);
+    },
+    //删除
+    delete1(row) {
       console.log(row.id);
     },
     // 请求数据
@@ -405,9 +461,9 @@ export default {
 }
 .content_title {
   margin: 0px 20px 10px 20px;
-  padding: 7px 0px;
+  padding: 0px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
 }
 .content_title1 {
   /* width: 100%; */
