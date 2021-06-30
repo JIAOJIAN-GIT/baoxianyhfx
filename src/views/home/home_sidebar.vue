@@ -27,21 +27,18 @@
       </template>
       <el-menu-item
         :class="activeClass == '/home' ? 'hover' : ''"
-        @click="activeItem('/home')"
         index="/home"
       >
         客户画像
       </el-menu-item>
       <el-menu-item
         :class="activeClass == '/home/CustomerInquiryI' ? 'hover' : ''"
-        @click="activeItem('/home/CustomerInquiryI')"
         index="/home/CustomerInquiryI"
       >
         客户查询
       </el-menu-item>
       <el-menu-item
         :class="activeClass == '/home/SecurityAnalysis' ? 'hover' : ''"
-        @click="activeItem('/home/SecurityAnalysis')"
         index="/home/SecurityAnalysis"
       >
         保障分析
@@ -55,21 +52,18 @@
       </template>
       <el-menu-item
         :class="activeClass == '/home/familyCustomerPortrait' ? 'hover' : ''"
-        @click="activeItem('/home/familyCustomerPortrait')"
         index="/home/familyCustomerPortrait"
       >
         家庭画像
       </el-menu-item>
       <el-menu-item
         :class="activeClass == '/home/familyCustomerInquiryI' ? 'hover' : ''"
-        @click="activeItem('/home/familyCustomerInquiryI')"
         index="/home/familyCustomerInquiryI"
       >
         家庭查询
       </el-menu-item>
       <el-menu-item
         :class="activeClass == '/home/familySecurityAnalysis' ? 'hover' : ''"
-        @click="activeItem('/home/familySecurityAnalysis')"
         index="/home/familySecurityAnalysis"
       >
         保障分析
@@ -81,15 +75,36 @@
         <img src="../../assets/img/u495.svg" alt="" />
         产品中心
       </template>
-      <el-menu-item index="/home/ProductInformation"> 产品信息 </el-menu-item>
-      <el-menu-item index="/home/addProduct"> 添加产品 </el-menu-item>
-      <el-menu-item index="/home/Statistics"> 产品统计 </el-menu-item>
+      <el-menu-item
+        :class="activeClass == '/home/ProductInformation' ? 'hover' : ''"
+        index="/home/ProductInformation"
+      >
+        产品信息
+      </el-menu-item>
+      <el-menu-item
+        :class="activeClass == '/home/addProduct' ? 'hover' : ''"
+        index="/home/addProduct"
+      >
+        添加产品
+      </el-menu-item>
+      <el-menu-item
+        :class="activeClass == '/home/Statistics' ? 'hover' : ''"
+        index="/home/Statistics"
+      >
+        产品统计
+      </el-menu-item>
     </el-submenu>
-    <el-menu-item>
+    <el-menu-item
+      :class="activeClass == '/home/recommend' ? 'hover' : ''"
+      index="/home/recommend"
+    >
       <img src="../../assets/img/u487.svg" alt="" />
       保险方案推荐</el-menu-item
     >
-    <el-menu-item index="/home/accountNumber">
+    <el-menu-item
+      :class="activeClass == '/home/accountNumber' ? 'hover' : ''"
+      index="/home/accountNumber"
+    >
       <img src="../../assets/img/u501.svg" alt="" />
       账号设置</el-menu-item
     >
@@ -100,20 +115,33 @@
 export default {
   data() {
     return {
-      activeClass: "/home",
-      opends: ["1"],
+      // activeClass: "/home",
+      // opends: ["1"],
     };
   },
-  methods: {
-    activeItem(activeItem) {
-      console.log(activeItem);
-      this.activeClass = activeItem;
+  computed: {
+    activeClass: function () {
+      return this.$store.state.pathName;
     },
+    opends: function () {
+      return this.$store.state.opends;
+    },
+  },
+  methods: {
     handleSelect(index, path) {
-      this.$store.commit("savePath", index);
-      // console.log(this.$store.state.pathName);
+      let data = {};
+      data.pathName = index;
+      data.index = path[0];
+      this.$store.commit("savePath", data);
+      localStorage.setItem("index", path[0]);
       // console.log(index, path);
     },
+  },
+  mounted: function () {
+    // console.log(this.$route.path);
+    this.$route.path == "/home"
+      ? this.handleSelect(this.$route.path, "1")
+      : this.handleSelect(this.$route.path, localStorage.getItem("index"));
   },
 };
 </script>

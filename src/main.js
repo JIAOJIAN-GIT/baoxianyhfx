@@ -15,7 +15,7 @@ axios.defaults.baseURL = '/api'//设置常态值
 
 
 Vue.prototype.$axios = axios//赋值给全局对象
-Vue.prototype.$echarts = echarts
+Vue.prototype.$echarts = echarts//
 Vue.config.productionTip = false;
 Vue.use(ElementUI)
 Vue.use(echarts)

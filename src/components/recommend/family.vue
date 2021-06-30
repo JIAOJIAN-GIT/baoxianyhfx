@@ -1,27 +1,10 @@
 <template>
   <el-card class="cardbox">
-    <!-- 搜索 -->
-    <el-form :inline="true" :model="formDate" class="content_sou">
-      <el-form-item label="输入查询">
-        <el-input v-model="formDate.name" placeholder="姓名"></el-input>
-      </el-form-item>
-      <el-form-item label="身份证号码">
-        <el-input v-model="formDate.idno" placeholder="全部"></el-input>
-      </el-form-item>
-      <el-form-item label="家庭号">
-        <el-input v-model="formDate.appntno" placeholder="全部"></el-input>
-      </el-form-item>
-      <el-form-item width="200px">
-        <el-button type="primary" @click="querydata"
-          ><i class="el-icon-search"></i>查询</el-button
-        >
-        <el-button @click="resetData"
-          ><i class="el-icon-refresh-left"></i>重置</el-button
-        >
-      </el-form-item>
-    </el-form>
+    <el-row class="row1" v-if="xian == '1'">
+      <el-button type="success" @click="InsuranceProposal">投保建议</el-button>
+    </el-row>
     <el-row :gutter="10" style="margin-top: 0px">
-      <el-col :span="10">
+      <el-col :span="12">
         <div class="grid-content">家庭保障一览</div>
         <el-col :span="24" :gutter="10">
           <el-col class="massge_top" :span="7">
@@ -80,15 +63,7 @@
           </el-row>
         </el-col>
       </el-col>
-      <el-col :span="7">
-        <div class="grid-content">家庭特征分析</div>
-        <echarts
-          :id="'bargraph1'"
-          :data="option1"
-          style="height: 30vh"
-        ></echarts>
-      </el-col>
-      <el-col :span="7">
+      <el-col :span="12">
         <div class="grid-content">家庭保障分析</div>
         <echarts
           :id="'bargraph2'"
@@ -217,6 +192,7 @@ export default {
   data() {
     return {
       input: "qinfshu",
+      xian: "1",
       lengthShu: "2",
       formDate: {
         name: "",
@@ -243,34 +219,6 @@ export default {
           address: "上海市普陀区金沙江路 1518 弄",
         },
       ],
-
-      option1: {
-        radar: {
-          shape: "circle",
-          indicator: [
-            { name: "消费金额", max: 80 },
-            { name: "支付能力", max: 90 },
-            { name: "客户粘性", max: 50 },
-            { name: "客户忠诚度", max: 60 },
-            { name: "客户有效性", max: 60 },
-          ],
-        },
-        series: [
-          {
-            name: "预算 vs 开销（Budget vs spending）",
-            type: "radar",
-            data: [
-              {
-                value: [40, 40, 40, 40, 40],
-                name: "预算分配（Allocated Budget）",
-                areaStyle: {
-                  color: "rgba(240,255,255, 0.9)",
-                },
-              },
-            ],
-          },
-        ],
-      },
       option2: {
         radar: {
           shape: "circle",
@@ -332,12 +280,9 @@ export default {
         confirmButtonText: "确定",
       });
     },
-    // 查询事件
-    querydata() {
-      this.formDate.prdtype = "";
-      this.requestData(this.formDate);
+    InsuranceProposal() {
+      this.$router.push("/home/InsuranceProposal");
     },
-    resetData() {},
     requestData(params) {
       let date = {};
       for (let item in params) {
@@ -394,6 +339,8 @@ export default {
     },
   },
   mounted: function () {
+    console.log(this.$route.query.id);
+    this.xian = this.$route.query.id;
     this.requestData(this.formDate);
   },
   components: {
@@ -403,15 +350,13 @@ export default {
 </script>
 
 <style scoped>
-.content_sou {
-  color: rgba(aas, rgb(23, 255, 100), blue, alpha);
-  position: relative;
-  margin: 0px 20px;
-  font-size: 14px;
-  display: flex;
-  justify-content: space-between;
+.row1 {
+  text-align: right;
 }
-
+.el-button {
+  border-radius: 0px;
+  background-color: #2ecc71;
+}
 .el-row {
   margin-top: 20px;
   margin-bottom: 20px;

@@ -4,78 +4,24 @@
     <!-- 搜索部分 -->
     <el-card body-style="padding: 10px 0px;">
       <div class="title_sou">
-        <div class="font_title">客户查询</div>
-        <el-button type="primary" @click="dialog = true">高级搜索</el-button>
+        <div class="font_title">家庭查询</div>
       </div>
       <el-divider></el-divider>
       <!-- 搜索内容 -->
       <el-form :inline="true" :model="params" class="content_sou">
         <el-form-item label="输入查询">
-          <el-input
-            v-model="params.name"
-            placeholder="姓名"
-            style="width: 100px"
-          ></el-input>
+          <el-input v-model="formDate.name" placeholder="姓名"></el-input>
         </el-form-item>
-        <el-form-item label="渠道">
-          <el-select
-            v-model="params.channel"
-            placeholder="个险"
-            style="width: 100px"
-          >
-            <el-option
-              v-for="(item, i) in FData.channels.data"
-              :key="i"
-              :value="item"
-            ></el-option>
-          </el-select>
+        <el-form-item label="身份证号码：">
+          <el-input v-model="formDate.number" placeholder="全部"></el-input>
         </el-form-item>
-        <el-form-item label="城市">
-          <el-select
-            v-model="params.cities"
-            placeholder="太原"
-            style="width: 120px"
-          >
-            <el-option
-              v-for="(item, i) in FData.cities.data"
-              :key="i"
-              :value="item"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="区">
-          <el-select v-model="params.region" placeholder="小店区">
-            <el-option
-              v-for="(item, i) in FData.regions.data"
-              :key="i"
-              :value="item"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="客户级别">
-          <el-select
-            v-model="params.level"
-            placeholder="钻石客户"
-            style="width: 120px"
-          >
-            <el-option
+        <el-form-item label="客户号">
+          <el-select v-model="formDate.level" placeholder="全部">
+            <!-- <el-option
               v-for="(item, i) in FData.customer_levels.data"
               :key="i"
               :value="item"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="服务">
-          <el-select
-            v-model="params.state"
-            placeholder="在职"
-            style="width: 100px"
-          >
-            <el-option
-              v-for="(item, i) in FData.servstates.data"
-              :key="i"
-              :value="item"
-            ></el-option>
+            ></el-option> -->
           </el-select>
         </el-form-item>
         <el-form-item width="200px">
@@ -91,106 +37,95 @@
     <!-- 数据展示 -->
     <el-card class="shu" body-style="padding: 10px 0px">
       <div class="content_title">
-        <div>客户列表</div>
-        <div>
-          <el-button><i class="el-icon-upload2"></i>导出</el-button>
-          <el-button @click="leadingIn"
-            ><i class="el-icon-download"></i>导入</el-button
-          >
-          <el-button><i class="el-icon-plus"></i>添加</el-button>
-        </div>
+        <div class="font_title">家庭列表</div>
       </div>
       <!-- 表格 -->
-      <el-table
-        ref="multipleTable"
-        :data="tableData"
-        border
-        stripe
-        :header-cell-style="{
-          backgroundColor: '#03a7f0',
-          color: '#fff',
-        }"
-        height="570"
-        tooltip-effect="dark"
-        style="width: 100%"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column
-          type="selection"
-          width="55"
-          align="center"
-        ></el-table-column>
-        <!-- <el-table-column label="日期" width="120" align="center">
+      <div class="divcol">
+        <el-table
+          ref="multipleTable"
+          :data="tableData"
+          border
+          stripe
+          :header-cell-style="{
+            backgroundColor: '#03a7f0',
+            fontWeight: 600,
+            color: '#fff',
+          }"
+          height="570"
+          tooltip-effect="dark"
+          style="width: 100%"
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column
+            type="selection"
+            width="55"
+            align="center"
+          ></el-table-column>
+          <!-- <el-table-column label="日期" width="120" align="center">
           <template slot-scope="scope">{{ scope.row.date }}</template>
         </el-table-column> -->
-        <el-table-column
-          align="center"
-          prop="name"
-          label="客户姓名"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="region"
-          label="所在地区"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="channel"
-          label="渠道"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="level"
-          label="级别"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="sex"
-          label="性别"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="birthday"
-          label="生日"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="tbpremTotal"
-          label="投保主险保费保费总额"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="tbamntTotal"
-          label="投保保障总额"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="number"
-          label="保单数"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="mepremTotal"
-          label="本人保障总额"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="meamntGap"
-          label="本人保障缺口"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="state"
-          label="服务状态"
-        ></el-table-column>
-        <el-table-column align="center" fixed="right" label="操作" width="80">
-          <template align="center" slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small"
-              >详情</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
+          <el-table-column
+            align="center"
+            prop="name"
+            label="客户姓名"
+          ></el-table-column>
+          <el-table-column
+            align="center"
+            prop="region"
+            label="所在地区"
+          ></el-table-column>
+          <el-table-column
+            align="center"
+            prop="channel"
+            label="级别"
+          ></el-table-column>
+          <el-table-column
+            align="center"
+            prop="level"
+            label="性别"
+          ></el-table-column>
+          <el-table-column
+            align="center"
+            prop="sex"
+            label="生日"
+          ></el-table-column>
+          <el-table-column
+            align="center"
+            prop="sex"
+            label="投保主险保费保费总额"
+          ></el-table-column>
+          <el-table-column
+            align="center"
+            prop="sex"
+            label="投保保障总额"
+          ></el-table-column>
+          <el-table-column
+            align="center"
+            prop="sex"
+            label="保单数"
+          ></el-table-column>
+          <el-table-column
+            align="center"
+            prop="sex"
+            label="家庭保障总额"
+          ></el-table-column>
+          <el-table-column
+            align="center"
+            prop="sex"
+            label="家庭保障缺口预估"
+          ></el-table-column>
+          <el-table-column align="center" fixed="right" label="操作" width="80">
+            <template align="center" slot-scope="scope">
+              <el-button
+                @click="handleClick(scope.row)"
+                type="text"
+                size="small"
+                >详情</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
       <!-- 分页 -->
       <div class="content_title1">
         <div>
@@ -235,41 +170,6 @@
         </div>
       </div>
     </el-card>
-
-    <!-- 弹框高级搜索 -->
-    <el-drawer
-      title="高级搜索"
-      :before-close="handleClose"
-      :visible.sync="dialog"
-      size="45%"
-      direction="btt"
-      custom-class="demo-drawer"
-      ref="drawer"
-    >
-      <div class="demo-drawer__content">
-        <el-form :model="form" class="form2">
-          <el-form-item
-            :label-width="formLabelWidth"
-            v-for="(item, i) in formdata"
-            :key="i"
-          >
-            <div>{{ item.name }} :</div>
-            <el-select :placeholder="item.data[0]">
-              <el-option
-                v-for="(text, i) in item.data"
-                :key="i"
-                :value="text"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-form>
-        <div class="demo-drawer__footer">
-          <el-link type="primary">清楚条件</el-link>
-          <el-button @click="cancelForm">取 消</el-button>
-          <el-button type="primary" @click="querydata2">确 定</el-button>
-        </div>
-      </div>
-    </el-drawer>
   </div>
 </template>
 
@@ -293,11 +193,19 @@ export default {
         page_size: 10, //一页条数
         total: 0, //总页数
       },
-      // 高级查询数据
-      formdata: [],
+      // 查询数据
+      formDate: {
+        name: "",
+        isinsured: "1",
+        id: "",
+        number: "",
+        cadegory: "",
+        page: 0, //当前页码
+        page_size: 20, //一页条数
+      },
       options: [{ label: "批量操作", value: "批量操作" }],
       // 查询数据
-      FData: {},
+      FData: [],
       // 表数据
       tableData: [],
       // tableData: [
@@ -324,23 +232,6 @@ export default {
 
       // 当表格选择项发生变化时
       multipleSelection: [],
-
-      // 弹框
-      dialog: false,
-      loading: false,
-
-      form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: "",
-      },
-      formLabelWidth: "80px",
-      timer: null,
     };
   },
   watch: {
@@ -391,9 +282,7 @@ export default {
     //详情
     handleClick(row) {
       this.$store.commit("saveIndexState", "0");
-      this.$router.push(
-        `/home/SAbaozhangxiangqing1?id=${row.id}&name=${row.name}`
-      );
+      this.$router.push(`/home/recommendDetails`);
       console.log(row.id);
     },
     // 请求数据
@@ -490,7 +379,6 @@ export default {
   mounted: function () {
     this.$axios.get("/dictionary").then((res) => {
       this.FData = res.data.customer;
-      this.formdata = Object.values(res.data.customer);
     });
     this.requestData(this.params);
   },
@@ -504,17 +392,20 @@ export default {
 
 .title_sou {
   margin: 0px 20px;
+  padding: 7px 0px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 .content_sou {
   position: relative;
+  padding-top: 10px;
+  height: 50px;
   margin: 0px 20px;
   font-size: 14px !important;
   display: flex;
   justify-content: space-between;
 }
-.title_sou > div {
+.font_title {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -524,6 +415,10 @@ export default {
 }
 
 /* 下部分 */
+.divcol {
+  width: 98%;
+  margin: 0px auto !important;
+}
 .shu {
   margin-top: 25px;
   position: absolute;
@@ -534,8 +429,9 @@ export default {
 }
 .content_title {
   margin: 0px 20px 10px 20px;
+  padding: 7px 0px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 .content_title1 {
   /* width: 100%; */

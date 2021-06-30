@@ -1,13 +1,21 @@
 <template>
-  <el-card body-style="padding: 0px;" class="cardbox">
-    <el-row>
+  <el-card class="cardbox">
+    <el-row class="header" type="flex" justify="flex-start">
+      <div>
+        <el-button class="el-button1" @click="details">客户详情</el-button>
+        <el-button class="el-button1 el-button2" type="success"
+          >编辑资料</el-button
+        >
+      </div>
+    </el-row>
+    <el-row class="text1">
       <el-col :span="24" class="title">
         <div class="grid-content">编辑产品资料</div>
-        <div class=""><b class="xing"> * </b>为必填项</div>
+        <div><b class="xing"> * </b>为必填项</div>
       </el-col>
       <el-col :span="24">
         <div style="margin: 20px auto; width: 60%">
-          <el-form ref="form" :model="form" label-width="100px">
+          <el-form ref="form" :model="form" label-width="130px">
             <el-row>
               <!-- 产品名称，编码 -->
               <el-row
@@ -17,15 +25,41 @@
                 justify="space-between"
               >
                 <el-col :span="11">
-                  <el-form-item label="产品名称：" :required="true">
+                  <el-form-item label="客户姓名：">
                     <el-input
-                      placeholder="惠信宝"
+                      placeholder="张天爱"
+                      :disabled="true"
                       v-model="form.name"
                     ></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="11">
-                  <el-form-item label="产品编码：" :required="true">
+                  <el-form-item label="职业：" :required="true">
+                    <el-input v-model="form.name"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <!-- 产品简介 -->
+              <el-row class="row" :span="24">
+                <el-form-item label="家庭收入：" :required="true">
+                  <el-input v-model="form.name"></el-input>
+                </el-form-item>
+              </el-row>
+              <el-row class="row1"> 新增家庭成员： </el-row>
+              <!-- 产品类别，子类 -->
+              <el-row
+                class="row"
+                :span="24"
+                type="flex"
+                justify="space-between"
+              >
+                <el-col :span="11">
+                  <el-form-item label="姓名：" :required="true">
+                    <el-input v-model="form.name"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="11">
+                  <el-form-item label="与客户关系：" :required="true">
                     <el-input v-model="form.name"></el-input>
                   </el-form-item>
                 </el-col>
@@ -38,31 +72,26 @@
                 justify="space-between"
               >
                 <el-col :span="11">
-                  <el-form-item label="产品类别：" :required="true">
-                    <el-input v-model="form.name"></el-input>
+                  <el-form-item label="性别：" :required="true">
+                    <el-radio-group v-model="form.resource">
+                      <el-radio label="男"></el-radio>
+                      <el-radio label="女"></el-radio>
+                    </el-radio-group>
                   </el-form-item>
                 </el-col>
                 <el-col :span="11">
-                  <el-form-item label="产品子类：" :required="true">
+                  <el-form-item label="年龄：" :required="true">
                     <el-input v-model="form.name"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
-              <!-- 产品简介 -->
-              <el-row class="row" :span="24">
-                <el-form-item label="产品简介：" :required="true">
-                  <el-input v-model="form.name"></el-input>
-                </el-form-item>
-              </el-row>
-              <!-- 产品详情 -->
-              <el-row class="row" :span="24">
-                <el-form-item label="产品详情：" :required="true">
-                  <el-input
-                    type="textarea"
-                    :rows="8"
-                    v-model="form.desc"
-                  ></el-input>
-                </el-form-item>
+              <el-row class="row2">
+                <el-button
+                  class="btn1"
+                  type="primary"
+                  style="background-color: #0079fe"
+                  >提交
+                </el-button>
               </el-row>
               <el-row class="anniu">
                 <el-button
@@ -86,7 +115,6 @@
 export default {
   data() {
     return {
-      //   tableData: [{}],
       form: {
         name: "",
         region: "",
@@ -94,16 +122,17 @@ export default {
         date2: "",
         delivery: false,
         type: [],
-        resource: "",
+        resource: "男",
         desc: "",
       },
     };
   },
   methods: {
     btn2() {},
+    details() {
+      this.$router.push("/home/recommendDetails");
+    },
   },
-  computed: {},
-  mounted: function () {},
 };
 </script>
 
@@ -112,6 +141,7 @@ export default {
   display: flex;
   height: 46px;
   line-height: 46px;
+  margin-bottom: 30px;
   padding-right: 20px;
   justify-content: space-between;
   border-bottom: 1px #e9e9e9 solid;
@@ -127,35 +157,35 @@ export default {
   font-size: 14px;
   padding-left: 20px;
 }
+.text1 {
+  font-size: 14px;
+}
+.header {
+  width: 100%;
+  margin-bottom: 20px;
+}
+.el-button1 {
+  border-radius: 0px;
+}
+.el-button2 {
+  background-color: #2ecc71;
+}
 .xing {
   color: red;
 }
-.row {
-  margin-bottom: 30px;
-}
-.el-row {
-  font-size: 14px;
-  color: #666;
-}
 .anniu {
+  margin-top: 20px;
   text-align: center;
 }
 .btn1 {
   width: 140px;
 }
-.text {
-  height: 40px;
-  max-height: 40px;
-  padding: 0px 10px;
-  line-height: 40px;
-  border-bottom: 1px rgba(250, 205, 145, 0.6) solid;
-  box-sizing: border-box;
+.row1 {
+  color: red;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
-.text1 {
-  min-height: 40px;
-  padding: 0px 10px;
-  line-height: 40px;
-  border-bottom: 1px rgba(250, 205, 145, 0.6) solid;
-  box-sizing: border-box;
+.row2 {
+  text-align: right;
 }
 </style>

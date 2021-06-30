@@ -188,16 +188,46 @@ export default new Router({
           component: () => import('../views/ProductInformation/Statistics.vue')
         },
         //--------------------账号设置
-        //产品统计
+        //账号设置
         {
           path: 'accountNumber',
           component: () => import('../views/accountNumber')
         },
-        //产品统计
+        //添加账号
         {
           path: 'addaccountNumber',
           name: "addaccountNumber",
           component: () => import('../views/accountNumber/addaccountNumber.vue')
+        },
+        //--------------------保险方案推荐
+        //保险方案推荐
+        {
+          path: 'recommend',
+          component: () => import('../views/recommend')
+        },
+        //详情
+        {
+          path: 'recommendDetails',
+          name: "recommendDetails",
+          component: () => import('../components/recommend/recommendDetails.vue')
+        },
+        //编辑
+        {
+          path: 'editRecommend',
+          name: "editRecommend",
+          component: () => import('../components/recommend/editRecommend.vue')
+        },
+        //家庭保障分析
+        {
+          path: 'family',
+          name: "family",
+          component: () => import('../components/recommend/family.vue')
+        },
+        //家庭保障分析
+        {
+          path: 'InsuranceProposal',
+          name: "InsuranceProposal",
+          component: () => import('../components/recommend/InsuranceProposal.vue')
         },
       ]
     }
